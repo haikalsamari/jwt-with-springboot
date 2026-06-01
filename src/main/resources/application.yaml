@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # auto create/update tables
+    show-sql: true       # print SQL in console
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  sql:
+    init:
+      mode: always       # run schema/data.sql if exists
+
+  application:
+    name: Authentication
+
+server:
+  port: 8080
