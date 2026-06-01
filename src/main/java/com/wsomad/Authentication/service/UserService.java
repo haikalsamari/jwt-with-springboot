@@ -5,6 +5,7 @@ import com.wsomad.Authentication.model.DTO.AuthResponse;
 import com.wsomad.Authentication.model.User;
 import com.wsomad.Authentication.repository.UserRepository;
 import com.wsomad.Authentication.util.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +47,12 @@ public class UserService {
 
         // Then, return the generated token
         return new AuthResponse(token);
+    }
+
+    public User getCurrentUserDetails(HttpServletRequest request) {
+        String token = jwtUtil.extractToken(request);
+        Long userId = jwtUtil.extractSubject(token);
+
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

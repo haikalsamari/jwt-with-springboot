@@ -16,7 +16,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+                .httpBasic(http -> http.disable())   // 🔥 disable default auth
+                .formLogin(form -> form.disable());  // 🔥 disable default login form;
         return httpSecurity.build();
     }
 

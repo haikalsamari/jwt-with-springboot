@@ -4,6 +4,7 @@ import com.wsomad.Authentication.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -38,9 +39,20 @@ public class JWTUtil {
                 .compact();
     }
 
-    // Extract username
-    public Claims extractUsername(String token) {
-        return parseClaims(token);
+    public String extractToken(HttpServletRequest request) {
+        String authenticationHeader = request.getHeader("Authorization");
+
+        if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
+            throw  new RuntimeException("Missing or invalid Authorization header");
+        }
+
+        return authenticationHeader.substring(7);
+    }
+
+    // Extract subject
+    public Long extractSubject(String token) {
+        Claims claim = parseClaims(token);
+        return Long.parseLong(claim.getSubject());
     }
 
     // Validate token
